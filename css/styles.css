@@ -320,3 +320,76 @@ nav h1 a {
   font-weight: bold;
   vertical-align: top;
 }
+
+/* ################## Media Queries ################## */
+@media screen and (max-width: 1200px) {
+  #restaurants-list li {
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  #restaurant-container {
+    width: 40%;
+  }
+  #reviews-container {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #restaurants-list li {
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 701px) {
+  #restaurant-container, #reviews-container {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 700px) {
+  #restaurants-list li {
+    width: 270px;
+  }
+}  
+
+@media screen and (max-width: 600px) {
+  #restaurant-container, #reviews-container, #breadcrumb {
+    padding: 12px;
+    width: 100%;
+  }
+  .filter-options {
+    flex-direction: column;
+    padding-top: 16px;
+  }
+  #restaurant-container, #reviews-container {
+    width: inherit;
+  }
+  #restaurant-name {
+    margin: 5px 0 10px;
+  }
+  #reviews-container h2 {
+    margin: 0 0 10px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  #restaurant-container, #reviews-container, #breadcrumb {
+    padding: 10px;
+  }
+  #restaurants-list li {
+    margin: 15px 0;
+    width: 270px;
+  }
+}
+
+@media screen and (min-width: 419px) {
+  #restaurant-container {
+    padding-right: 20px;
+  }
+  #reviews-container {
+    padding-left: 20px;
+  }
+}
