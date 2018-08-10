@@ -151,21 +151,21 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/dest/${restaurant.photograph}`);
+    return (`/dest/${restaurant.id}-300.jpg`);
   }
 
    /**
    * Restaurant image Srcset.
    */
   static imageSrcsetForIndex(restaurant) {
-    return (`${restaurant.srcset_index}`);
+    return (`/dest/${restaurant.id}-300.jpg 1x, /dest/${restaurant.id}-600_2x.jpg 2x`);
   }
 
   /**
    * Restaurant image Srcset.
    */
   static imageSrcsetForRestaurant(restaurant) {
-    return (`${restaurant.srcset_restaurant}`);
+    return (`/dest/${restaurant.id}-300.jpg 300w, /dest/${restaurant.id}-400.jpg 400w, /dest/${restaurant.id}-600_2x.jpg 600w, /dest/${restaurant.id}-800_2x.jpg 800w`);
   }
 
   /**
