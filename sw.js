@@ -18,7 +18,13 @@ self.addEventListener('install', (event)=> {
         'restaurant.html?id=7',
         'restaurant.html?id=8',
         'restaurant.html?id=9',
-        'restaurant.html?id=10'
+        'restaurant.html?id=10',
+        'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
+        'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
+        'https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css',
+        'https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js',
+        'https://api.tiles.mapbox.com/v4/mapbox.streets/',
+        'https://unpkg.com/leaflet@1.3.1/dist/images/marker-icon.png'
       ]);
     })
   );

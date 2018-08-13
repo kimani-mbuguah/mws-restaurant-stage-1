@@ -3,12 +3,7 @@
     "name": "Restaurant Reviews",
     "icons": [
       {
-        "src": "./dest/restaurant-15-72.png",
-        "type": "image/png",
-        "sizes": "192x192"
-      },
-      {
-        "src": "./dest/restaurant-15-114.png",
+        "src": "./dest/icon.png",
         "type": "image/png",
         "sizes": "512x512"
       }

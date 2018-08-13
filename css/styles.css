@@ -10,20 +10,20 @@ html {
 }
 body,td,th,p{
 	color: #333;
-  font: 16px/1.6 Arial, Helvetica, sans-serif;
+  font: 16px/1.5 Arial, Helvetica, sans-serif;
 }
 body {
-	background-color: #ffffff;
+	background-color: #fdfdfd;
 	margin: 0;
 	position:relative;
 }
 
 a {
-  color: #db435c;
+  color:orange;
 	text-decoration: none;
 }
 a:hover, a:focus {
-	color: #f30202;  
+	color: #3397db;  
 	text-decoration: none;
 }
 nav h1 a:hover {
@@ -39,8 +39,7 @@ h1, h2, h3, h4, h5, h6 {
 article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
 	display: block;
 }
-#maincontent, #breadcrumb {
-  max-width: 1200px;
+#breadcrumb{
   margin: auto;
 }
 #maincontent {
@@ -48,7 +47,6 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   min-height: 100%;
   display: flex;
   flex-wrap: wrap;
-  border: 1px solid #999;
 }
 
 #footer {
@@ -97,13 +95,12 @@ nav h1 a {
 }
 
 #breadcrumb li a {
-    color: #961515;
+    color: #0275d8;
     text-decoration: none;
-    border-bottom: 1px dotted #d85b5b;
 }
 
 #breadcrumb li a:hover {
-    color: #333;
+    color: #01447e;
     text-decoration: underline;
     border: none;
 }
@@ -121,6 +118,7 @@ nav h1 a {
   width: 100%;
 }
 .filter-options {
+  width: 100%;
   background-color: #01064b;
   align-items: center;
   padding: 10px;
@@ -217,7 +215,7 @@ nav h1 a {
 
 /* ################## Restaurant Details ################## */
 .inside #map-container {
-  background: #f7dba8 none repeat scroll 0 0;
+  background: blue none repeat scroll 0 0;
   height: 400px;
   border-bottom: 1px solid #999;
   width: 100%;
@@ -229,7 +227,7 @@ nav h1 a {
 }
 
 #restaurant-name {
-  color: #d85b5b;
+  color: #f18200;
   font-family: Arial,sans-serif;
   font-weight: 200;
   letter-spacing: 0;
@@ -264,14 +262,14 @@ nav h1 a {
   padding: 20px 40px;
 }
 #restaurant-container {
-  width: 38%;
+  width: 40%;
 }
 #reviews-container {
   padding-bottom: 0;
-  width: 62%;
+  width: 60%;
 }
 #reviews-container h2 {
-  color: #d85b5b;
+  color: #f58500;
   font-weight: 300;
   letter-spacing: -1px;
   padding-bottom: 1pt;
