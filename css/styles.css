@@ -182,10 +182,6 @@ nav h1 a {
   max-width: 100%;
   min-width: 100%;
 }
-#restaurants-list .restaurant-info {
-  margin: 0 20px;
-  height: 150px;
-}
 
 #restaurants-list li h2 {
   color: #ab1a1a;
@@ -201,9 +197,9 @@ nav h1 a {
   margin: 0;
 }
 #restaurants-list li button {
-  background-color: brown;
+  background-color: #01064b;
   color: #fff;
-  padding: 15px 30px;
+  padding: 15px 48px;
   text-align: center;
   text-transform: uppercase;
   margin: 0 20px;
