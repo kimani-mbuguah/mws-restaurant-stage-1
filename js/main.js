@@ -88,18 +88,6 @@ initMap = () => {
 
   updateRestaurants();
 }
-/* window.initMap = () => {
-  let loc = {
-    lat: 40.722216,
-    lng: -73.987501
-  };
-  self.map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: loc,
-    scrollwheel: false
-  });
-  updateRestaurants();
-} */
 
 /**
  * Update page and map for current restaurants.
@@ -182,6 +170,7 @@ createRestaurantHTML = (restaurant) => {
   li.append(emptyLine);
 
   const more = document.createElement('button');
+  more.setAttribute('aria-label', 'view details button');
   more.innerHTML = 'View Details';
   more.addEventListener('click', () => { window.location.href = DBHelper.urlForRestaurant(restaurant); });
   li.append(more);
