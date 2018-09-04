@@ -8,6 +8,7 @@ self.addEventListener('install', (event)=> {
         'css/styles.css',
         'js/dbhelper.js',
         'js/main.js',
+        'js/idb.js',
         'js/restaurant_info.js',
         'restaurant.html?id=1',
         'restaurant.html?id=2',
@@ -18,7 +19,15 @@ self.addEventListener('install', (event)=> {
         'restaurant.html?id=7',
         'restaurant.html?id=8',
         'restaurant.html?id=9',
-        'restaurant.html?id=10'
+        'restaurant.html?id=10',
+        './dest/1-300.jpg',
+        './dest/2-300.jpg',
+        './dest/3-300.jpg',
+        './dest/4-300.jpg',
+        './dest/5-300.jpg',
+        './dest/6-300.jpg',
+        './dest/7-300.jpg',
+        './dest/8-300.jpg',
       ]);
     })
   );
