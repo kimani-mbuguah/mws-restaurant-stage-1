@@ -9,7 +9,7 @@ class DBHelper {
    */
 
   static get DATABASE_URL() {
-    const port = 1337 // Change this to your server port
+    const port = 1337 
     return `http://localhost:${port}/restaurants`;
   }
 
@@ -17,15 +17,35 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-
+	const dbPromise = idb.open("restaurant-reviews-app", 1, upgradeDB => {
+		upgradeDB.createObjectStore("restaurants-db", { keyPath: "id" });
+	});
+	if (!navigator.serviceWorker.controller) {
 		fetch(DBHelper.DATABASE_URL)
-      .then(response => {
-        const restaurants = response.json();
-        return restaurants;
-      })
-      .then(restaurants => callback(null, restaurants))
-      .catch(err => callback(err, null));
-
+		.then(response => {
+			const restaurants = response.json();
+			return restaurants;
+		})
+		.then(restaurants => {
+			restaurants.map(restaurant => {
+				dbPromise.then(dbObj => {
+					const tx = dbObj.transaction("restaurants-db", "readwrite");
+					const restaurantStore = tx.objectStore("restaurants-db");
+					restaurantStore.put(restaurant);
+					});
+					callback(null, restaurants)
+				})
+			}).catch(err =>{
+				callback(err, null);	
+			})
+		}else{
+			dbPromise.then(objs => {
+				return objs.transaction("restaurants-db").objectStore("restaurants-db").getAll();
+			})
+			.then(restaurants => {
+				callback(null, restaurants);
+			});
+		}
 		/*
     let xhr = new XMLHttpRequest();
     xhr.open('GET', DBHelper.DATABASE_URL);
