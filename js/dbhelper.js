@@ -9,14 +9,24 @@ class DBHelper {
    */
 
   static get DATABASE_URL() {
-    const port = 8000 // Change this to your server port
-    return `http://localhost:${port}/data/restaurants.json`;
+    const port = 1337 // Change this to your server port
+    return `http://localhost:${port}/restaurants`;
   }
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
+
+		fetch(DBHelper.DATABASE_URL)
+      .then(response => {
+        const restaurants = response.json();
+        return restaurants;
+      })
+      .then(restaurants => callback(null, restaurants))
+      .catch(err => callback(err, null));
+
+		/*
     let xhr = new XMLHttpRequest();
     xhr.open('GET', DBHelper.DATABASE_URL);
     xhr.onload = () => {
@@ -29,7 +39,8 @@ class DBHelper {
         callback(error, null);
       }
     };
-    xhr.send();
+		xhr.send();
+		*/
   }
 
   /**

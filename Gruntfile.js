@@ -7,30 +7,16 @@ module.exports = function(grunt) {
             engine: 'im',
             sizes: [
               {
-                width: 300,
-                quality: 60
-              },
-              {
-                width: 400,
-                quality: 60
-              },
-              {
-                width: 600,
-                quality: 60,
-                suffix: '_2x'
-              },
-              {
-                width: 800,
-                quality: 60,
-                suffix: '_2x'
+                width: 1366,
+                quality: 30
               }
             ]
           },
           files: [{
             expand: true,
-            cwd: './img/',
+            cwd: './hod/',
             src: ['*.{gif,jpg,png}'],
-            dest: './dest/'
+            dest: './hod1/'
           }]
         }
       }
