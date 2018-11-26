@@ -1,5 +1,5 @@
 let restaurant;
-let newMap;
+var newMap;
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -204,7 +204,7 @@ window.addEventListener("click", windowOnClick);
 
 /*Star Rating javascript file*/
 $(document).ready(function(){
-  console.log('hsdfjksdfhsdjkfhjksdfhsd');
+  //console.log('hsdfjksdfhsdjkfhjksdfhsd');
 
   /*Visualizing things on Hover */
   $('#stars li').on('mouseover', function(){

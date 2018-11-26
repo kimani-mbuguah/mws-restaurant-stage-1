@@ -488,5 +488,35 @@ nav h1 a {
   color:#888;
 }
 
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 2px solid #01064b;
+  border-radius: 4px;
+}
+input[type=text]:focus {
+  border: 3px solid #FF912C;
+}
 
+textarea{
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 2px solid #01064b;
+  border-radius: 4px;
+}
+textarea:focus {
+  border: 3px solid #FF912C;
+}
 
+.button {
+  background-color: #01064b;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
