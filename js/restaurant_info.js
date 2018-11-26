@@ -1,5 +1,5 @@
 let restaurant;
-var newMap;
+let newMap;
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -183,3 +183,81 @@ getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+// Modal review form
+let modal = document.querySelector(".modal");
+let trigger = document.querySelector(".trigger");
+let closeButton = document.querySelector(".close-button");
+
+function toggleModal() {
+    modal.classList.toggle("show-modal");
+}
+
+function windowOnClick(event) {
+    if (event.target === modal) {
+        toggleModal();
+    }
+}
+
+trigger.addEventListener("click", toggleModal);
+closeButton.addEventListener("click", toggleModal);
+window.addEventListener("click", windowOnClick);
+
+/*Star Rating javascript file*/
+$(document).ready(function(){
+  console.log('hsdfjksdfhsdjkfhjksdfhsd');
+
+  /*Visualizing things on Hover */
+  $('#stars li').on('mouseover', function(){
+    let onStar = parseInt($(this).data('value'), 10); 
+
+    $(this).parent().children('li.star').each(function(e){
+      if (e < onStar) {
+        $(this).addClass('hover');
+      }
+      else {
+        $(this).removeClass('hover');
+      }
+    });
+    
+  }).on('mouseout', function(){
+    $(this).parent().children('li.star').each(function(e){
+      $(this).removeClass('hover');
+    });
+  });
+  
+  
+  /* Action to perform on click */
+  $('#stars li').on('click', function(){
+    let onStar = parseInt($(this).data('value'), 10);
+    let stars = $(this).parent().children('li.star');
+    
+    for (i = 0; i < stars.length; i++) {
+      $(stars[i]).removeClass('selected');
+    }
+    
+    for (i = 0; i < onStar; i++) {
+      $(stars[i]).addClass('selected');
+    }
+    
+
+    let ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+    let msg = "";
+    if (ratingValue > 1) {
+        msg = "Thanks! You rated us " + ratingValue + " stars.";
+    }
+    else {
+        msg = "You rated us " + ratingValue + " star.";
+    }
+    responseMessage(msg);
+    
+  });
+  
+  
+});
+
+
+function responseMessage(msg) {
+  $('.success-box').fadeIn(200);  
+  $('.success-box div.text-message').html("<span>" + msg + "</span>");
+}
+
