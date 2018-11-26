@@ -183,7 +183,11 @@ getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
-// Modal review form
+
+
+/**
+ * Modal review form
+ **/ 
 let modal = document.querySelector(".modal");
 let trigger = document.querySelector(".trigger");
 let closeButton = document.querySelector(".close-button");
@@ -260,4 +264,10 @@ function responseMessage(msg) {
   $('.success-box').fadeIn(200);  
   $('.success-box div.text-message').html("<span>" + msg + "</span>");
 }
+
+
+/**
+ * Submit modal review form
+ */
+
 
