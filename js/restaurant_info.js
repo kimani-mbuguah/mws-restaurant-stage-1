@@ -1,5 +1,7 @@
 let restaurant;
 var newMap;
+let starsvalue = 0;
+let msg = "";
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -229,7 +231,7 @@ $(document).ready(function(){
     });
   });
   
-  
+
   /* Action to perform on click */
   $('#stars li').on('click', function(){
     let onStar = parseInt($(this).data('value'), 10);
@@ -245,14 +247,16 @@ $(document).ready(function(){
     
 
     let ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
-    let msg = "";
+    
     if (ratingValue > 1) {
         msg = "Thanks! You rated us " + ratingValue + " stars.";
     }
     else {
         msg = "You rated us " + ratingValue + " star.";
     }
-    responseMessage(msg);
+
+    starsvalue = ratingValue;
+ 
     
   });
   
@@ -260,14 +264,35 @@ $(document).ready(function(){
 });
 
 
-function responseMessage(msg) {
-  $('.success-box').fadeIn(200);  
-  $('.success-box div.text-message').html("<span>" + msg + "</span>");
+function responseMessage(message, messageType) {
+  $('.success-box').fadeIn(200); 
+  if(messageType === 1){
+    $('.success-box div.text-message').html("<span style='color:green;'>" + message + "</span>");
+  }else{
+    $('.success-box div.text-message').html("<span style='color:red;'>" + message + "</span>");
+  }
+
 }
 
 
 /**
  * Submit modal review form
  */
+document.getElementById('reviews-form').addEventListener('submit',(event)=>{
+  event.preventDefault();
+  if(starsvalue < 1){
+    const starRatingErrorMsg = "Please provide a star rating";
+    responseMessage(starRatingErrorMsg, -1);
+  }else{
+    const validForm = event.target;
+    if (validForm.checkValidity()){
+      const restaurant_id = getParameterByName('id');
+      const name = document.querySelector('#name').value;
+      const rating = starsvalue;
+      const review = document.querySelector('#review').value;
 
-
+      //show a success message
+      responseMessage(msg, 1);
+    }
+}
+});
