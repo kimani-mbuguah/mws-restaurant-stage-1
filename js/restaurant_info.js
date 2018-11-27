@@ -189,7 +189,7 @@ getParameterByName = (name, url) => {
 
 /**
  * Modal review form
- **/ 
+ */ 
 let modal = document.querySelector(".modal");
 let trigger = document.querySelector(".trigger");
 let closeButton = document.querySelector(".close-button");
@@ -208,11 +208,10 @@ trigger.addEventListener("click", toggleModal);
 closeButton.addEventListener("click", toggleModal);
 window.addEventListener("click", windowOnClick);
 
-/*Star Rating javascript file*/
+/**
+*Star Rating
+*/
 $(document).ready(function(){
-  //console.log('hsdfjksdfhsdjkfhjksdfhsd');
-
-  /*Visualizing things on Hover */
   $('#stars li').on('mouseover', function(){
     let onStar = parseInt($(this).data('value'), 10); 
 
@@ -232,7 +231,9 @@ $(document).ready(function(){
   });
   
 
-  /* Action to perform on click */
+  /**
+  *Action to perform on click 
+  */
   $('#stars li').on('click', function(){
     let onStar = parseInt($(this).data('value'), 10);
     let stars = $(this).parent().children('li.star');
@@ -289,10 +290,15 @@ document.getElementById('reviews-form').addEventListener('submit',(event)=>{
       const restaurant_id = getParameterByName('id');
       const name = document.querySelector('#name').value;
       const rating = starsvalue;
-      const review = document.querySelector('#review').value;
+      const comments = document.querySelector('#review').value;
 
       //show a success message
       responseMessage(msg, 1);
+
+      //try to post data into the database
+  
+    DBHelper.postReview(restaurant_id, name, rating, comments, Date.now()); 
+    validForm.reset();
     }
 }
 });

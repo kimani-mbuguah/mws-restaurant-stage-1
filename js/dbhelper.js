@@ -7,6 +7,10 @@ class DBHelper {
    * Database URL.
    * Change this to restaurants.json file location on your server.
    */
+  static get DATABASE_URL_REVIEWS() {
+    const port = 1337; 
+    return `http://localhost:${port}/reviews`;
+  }
 
   static get DATABASE_URL() {
     const port = 1337 
@@ -212,16 +216,41 @@ class DBHelper {
       marker.addTo(newMap);
     return marker;
   } 
-  /* static mapMarkerForRestaurant(restaurant, map) {
-    const marker = new google.maps.Marker({
-      position: restaurant.latlng,
-      title: restaurant.name,
-      url: DBHelper.urlForRestaurant(restaurant),
-      map: map,
-      animation: google.maps.Animation.DROP}
-    );
-    return marker;
-  } */
+/**
+ * Post review form
+ */
+
+static postReview(id, name, rating, comments,date) {
+  const url = DBHelper.DATABASE_URL_REVIEWS + "/?restaurant_id=" + id;
+  console.log(url);
+  const method = 'POST';
+
+  const data = {
+    restaurant_id: id,
+    name: name,
+    rating: rating,
+    comments: comments,
+    createdAt: date
+  };
+  const body = JSON.stringify(data);
+  console.log(`postReview - url: ${url}, method: ${method}, body: ${body}`);
+
+  DBHelper.cacheReview(id, body);
+}
+
+static cacheReview(id, body) {
+    console.log(`cacheReview - id: ${id}, update: ${body}`);
+    const dbPromise = idb.open("reviews-db", 1, upgradeDB => {
+      upgradeDB.createObjectStore("reviews", { keyPath: "id" });
+    });
+
+    dbPromise.then(dbObj => {
+      const tx = dbObj.transaction("reviews", "readwrite");
+      const restaurantStore = tx.objectStore("reviews");
+      restaurantStore.put({ id: Date.now(), restaurant_id: id, data: body });
+    });
+  }
 
 }
+ 
 
