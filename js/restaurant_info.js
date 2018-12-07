@@ -118,8 +118,9 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  * Create all reviews HTML and add them to the webpage.
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+  const restaurant_id = getParameterByName('id');
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
+  const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
 
@@ -129,12 +130,29 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     container.appendChild(noReviews);
     return;
   }
+
+  DBHelper.getReviews(restaurant_id);
   const ul = document.getElementById('reviews-list');
+  
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
   });
   container.appendChild(ul);
 }
+
+
+fillReview = (review) => {
+  const container = document.getElementById('reviews-container');
+  if (!review) {
+    container.appendChild(noReviews);
+    return;
+  }
+  const ul = document.getElementById('reviews-list');
+  ul.appendChild(createReviewHTML(review));
+  container.appendChild(ul);
+
+}
+
 
 /**
  * Create review HTML and add it to the webpage.
@@ -296,9 +314,17 @@ document.getElementById('reviews-form').addEventListener('submit',(event)=>{
       responseMessage(msg, 1);
 
       //try to post data into the database
-  
-    DBHelper.postReview(restaurant_id, name, rating, comments, Date.now()); 
-    validForm.reset();
+      const review = {
+        "restaurant_id": parseInt(restaurant_id),
+        "name": name,
+        "rating": parseInt(rating),
+        "comments": comments
+      } 
+
+      DBHelper.postReview(review);
+      fillReview(review);
     }
 }
 });
+
+
