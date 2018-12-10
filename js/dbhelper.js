@@ -8,6 +8,10 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
 
+  static get DATABASE_URL() {
+    const port = 1337 
+    return `http://localhost:${port}/restaurants`;
+  }
 
   static idbStorage() {
     var dbPromise = idb.open('restaurant-reviews-app', 1, function(upgradeDb) {
