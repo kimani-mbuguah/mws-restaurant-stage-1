@@ -151,7 +151,11 @@ createReviewHTML = (review) => {
   li.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  if(review.createdAt>0){
+    const formattedTime = new Date(review.createdAt).toLocaleDateString("en-US")
+    date.innerHTML = formattedTime;
+  }else{date.innerHTML = review.createdAt;}
+  
   li.appendChild(date);
 
   const rating = document.createElement('p');
@@ -278,6 +282,18 @@ function responseMessage(message, messageType) {
     $('.success-box div.text-message').html("<span style='color:red;'>" + message + "</span>");
   }
 
+}
+
+function toggle(button)
+{
+  const id = getParameterByName('id');
+  if(document.getElementById("like-btn").value=="Like"){
+    DBHelper.markFavorite(id);
+    document.getElementById("like-btn").value="Dislike";}
+
+  else if(document.getElementById("like-btn").value=="Dislike"){
+    DBHelper.unmarkFavorite(id);
+   document.getElementById("like-btn").value="Like";}
 }
 
 

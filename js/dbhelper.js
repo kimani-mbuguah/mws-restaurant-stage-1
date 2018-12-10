@@ -8,10 +8,6 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
 
-  static get DATABASE_URL() {
-    const port = 1337 
-    return `http://localhost:${port}/restaurants`;
-  }
 
   static idbStorage() {
     var dbPromise = idb.open('restaurant-reviews-app', 1, function(upgradeDb) {
@@ -23,6 +19,8 @@ class DBHelper {
         case 2:
           var reviewsStorage = upgradeDb.transaction.objectStore('restaurant-reviews');
           reviewsStorage.createIndex('restaurant', 'restaurant_id');
+        case 3:
+          upgradeDb.createObjectStore('favorite-restaurants');
       }
     });
     return dbPromise;
@@ -73,8 +71,44 @@ class DBHelper {
       }
     };
 		xhr.send();
-		*/
+    */
+    
+   DBHelper.fetchFavorite();
   }
+
+  static fetchFavorite() {
+    const query = "http://localhost:1337/restaurants/?is_favorite=true";
+    const dbPromise = DBHelper.idbStorage();
+    fetch(query).then((resp) => { 
+          return resp.json();
+        }).then((favoriteList) => {
+          console.log(favoriteList);
+          const dbPromise = DBHelper.idbStorage();
+          dbPromise.then((db) => {
+          const tx = db.transaction('favorite-restaurants', 'readwrite');
+          const favoriteStorage = tx.objectStore('favorite-restaurants');
+            favoriteList.forEach((favorite) => {
+              console.log(favorite)
+              favoriteStorage.put(favorite.id, 'key');
+            });
+            return tx.complete; 
+          });
+      }).catch((error) => {
+        dbPromise.then((db) => {
+        const tx = db.transaction('favorite-restaurants');
+        const favoriteStorage = tx.objectStore('favorite-restaurants');
+          return favoriteStorage.getAll();
+        }).then((favoriteList) => {
+            favoriteList.forEach((favorite) => {
+              console.log(favorite);
+            });
+        }).catch((error) => {
+          console.log(error);
+          
+        });
+      });
+  }
+  
 
   /**
    * Fetch a restaurant by its ID.
@@ -231,7 +265,6 @@ class DBHelper {
    */
   static getReviews(id) {
     const query = "http://localhost:1337/reviews/?restaurant_id="+id;
-    console.log(query);
     fetch(query).then((resp) => { 
           return resp.json();
         }).then((reviewsList) => {
@@ -240,7 +273,13 @@ class DBHelper {
           const tx = db.transaction('restaurant-reviews', 'readwrite');
           const reviewsStorage = tx.objectStore('restaurant-reviews');
             reviewsList.forEach((review) => {
-              console.log(review)
+              
+              if (!review) {
+                const noReviews = document.createElement('p');
+                noReviews.innerHTML = 'No reviews yet!';
+                container.appendChild(noReviews);
+                return;
+              }
               reviewsStorage.put(review);
               fillReview(review);
             });
@@ -254,7 +293,12 @@ class DBHelper {
           return restaurantIndex.getAll(id);
         }).then((data_reviews) => {
             data_reviews.forEach((review) => {
-              console.log('this works')
+              if (!review) {
+                const noReviews = document.createElement('p');
+                noReviews.innerHTML = 'No reviews yet!';
+                container.appendChild(noReviews);
+                return;
+              }
               fillReview(review);
             });
         }).catch((error) => {
@@ -290,8 +334,69 @@ class DBHelper {
       console.log(error);
     });
   }
-  
+
+  /**
+   * Mark favorite
+   */
+  static markFavorite(id){
+    const query = `http://localhost:1337/restaurants/${id}/?is_favorite=true`;
+    fetch(query, {
+      method: 'post'
+    }).then((response) => {
+      const dbPromise = DBHelper.idbStorage();
+      if (response.status === 200) {
+          dbPromise.then((db) => {
+          const tx = db.transaction('favorite-restaurants', 'readwrite');
+          const objectStore = tx.objectStore('favorite-restaurants');
+          objectStore.put(id, id);
+          return tx.complete;
+      });
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
 
 }
- 
 
+/**
+ * Remove favorite
+ */
+
+static unmarkFavorite(id){
+  const query = `http://localhost:1337/restaurants/${id}/?is_favorite=false`;
+  fetch(query, {
+    method: 'post'
+  }).then((resp) => {
+    console.log(resp);
+    const dbPromise = DBHelper.idbStorage();
+    dbPromise.then((db) => {
+      const tx = db.transaction('favorite-restaurants', 'readwrite');
+      const objectStore = tx.objectStore('favorite-restaurants');
+      objectStore.delete(id);
+      return tx.complete;
+    })
+  }).catch((error) => {
+    console.log(error);
+  });
+}
+/**
+ * Check if the restaurant is marked as favorite 
+ */
+static isFavorite(restaurant){
+  const dbPromise = DBHelper.idbStorage();
+    dbPromise.then((db) => {
+    const tx = db.transaction('favorite-restaurants');
+    const objectStore = tx.objectStore('favorite-restaurants');
+    return objectStore.getAll();
+    }).then((favoriteList) => {
+          if(favoriteList.indexOf(restaurant) != -1)
+          console.log("restaurant exists in favorites")
+          else
+          console.log('not marked favorite yet');
+      }).catch((error) => {
+        console.log(error);
+        
+      });
+}
+ 
+}
