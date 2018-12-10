@@ -7,10 +7,6 @@ class DBHelper {
    * Database URL.
    * Change this to restaurants.json file location on your server.
    */
-  static get DATABASE_URL_REVIEWS() {
-    const port = 1337; 
-    return `http://localhost:${port}/reviews`;
-  }
 
   static get DATABASE_URL() {
     const port = 1337 
@@ -37,9 +33,6 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
     const dbPromise = DBHelper.idbStorage();
-	// const dbPromise = idb.open("restaurant-reviews-app", 1, upgradeDB => {
-	// 	upgradeDB.createObjectStore("restaurants-db", { keyPath: "id" });
-	// });
 	if (!navigator.serviceWorker.controller) {
 		fetch(DBHelper.DATABASE_URL)
 		.then(response => {
@@ -237,20 +230,18 @@ class DBHelper {
    * get reviews
    */
   static getReviews(id) {
-    //try to fetch data to the local storage before going to the network
     const query = "http://localhost:1337/reviews/?restaurant_id="+id;
-    var dbPromise = DBHelper.idbStorage();
+    console.log(query);
     fetch(query).then((resp) => { 
           return resp.json();
         }).then((reviewsList) => {
-          console.log(reviewsList);
           const dbPromise = DBHelper.idbStorage();
           dbPromise.then((db) => {
           const tx = db.transaction('restaurant-reviews', 'readwrite');
           const reviewsStorage = tx.objectStore('restaurant-reviews');
             reviewsList.forEach((review) => {
               console.log(review)
-              reviewsStorage.put(review, review.id);
+              reviewsStorage.put(review);
               fillReview(review);
             });
             return tx.complete; 
@@ -262,13 +253,12 @@ class DBHelper {
         const restaurantIndex = reviewsStorage.index('restaurant')
           return restaurantIndex.getAll(id);
         }).then((data_reviews) => {
-            //if there is no data store, fetch from the local server
             data_reviews.forEach((review) => {
+              console.log('this works')
               fillReview(review);
             });
         }).catch((error) => {
           console.log(error);
-          
         });
       });
   }
