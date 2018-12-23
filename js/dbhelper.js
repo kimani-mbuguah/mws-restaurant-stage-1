@@ -335,7 +335,15 @@ class DBHelper {
       });
       console.log(data);
     }).catch((error) => {
-      console.log(error);
+      //console.log(error);
+      console.log("You appear to be offline at the moment. Your review will be posted as soon as a connection is established");
+      let key = 1;
+      for(var i =0; i < localStorage.length; i++){
+        console.log(localStorage.getItem(localStorage.key(i)));
+        key = i;
+     }
+      // save data as JSON string.
+        localStorage.setItem(key, JSON.stringify(review));
     });
   }
 
