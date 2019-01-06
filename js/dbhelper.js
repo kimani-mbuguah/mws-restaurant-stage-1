@@ -25,6 +25,8 @@ class DBHelper {
           reviewsStorage.createIndex('restaurant', 'restaurant_id');
         case 3:
           upgradeDb.createObjectStore('favorite-restaurants');
+        case 4:
+          upgradeDb.createObjectStore('offline-reviews');
       }
     });
     return dbPromise;
@@ -337,13 +339,13 @@ class DBHelper {
     }).catch((error) => {
       //console.log(error);
       console.log("You appear to be offline at the moment. Your review will be posted as soon as a connection is established");
-      let key = 1;
-      for(var i =0; i < localStorage.length; i++){
-        console.log(localStorage.getItem(localStorage.key(i)));
-        key = i;
-     }
-      // save data as JSON string.
-        localStorage.setItem(key, JSON.stringify(review));
+      const dbPromise = DBHelper.idbStorage();
+      dbPromise.then((db) => {
+        const tx = db.transaction('offline-reviews','readwrite');
+        const objectStore = tx.objectStore('offline-reviews');
+        objectStore.put(review, review.restaurant_id);
+        return tx.complete;
+      });
     });
   }
 
