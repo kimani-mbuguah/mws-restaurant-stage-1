@@ -1,7 +1,5 @@
 let restaurant;
 var newMap;
-let starsvalue = 0;
-let msg = "";
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -217,32 +215,33 @@ function toggle(button)
  */
 document.getElementById('reviews-form').addEventListener('submit',(event)=>{
   event.preventDefault();
-  if(starsvalue < 1){
-    const starRatingErrorMsg = "Please provide a star rating";
-    responseMessage(starRatingErrorMsg, -1);
-  }else{
     const validForm = event.target;
     if (validForm.checkValidity()){
       const restaurant_id = getParameterByName('id');
       const name = document.querySelector('#name').value;
-      const rating = starsvalue;
+      let rating = 1;
       const comments = document.querySelector('#review').value;
+      const radios = document.getElementsByName('star');
 
-      //show a success message
-      responseMessage(msg, 1);
+      for (var i = 0, length = radios.length; i < length; i++){
+        if (radios[i].checked){
+          rating = radios[1].value;
+          break;
+        }
+      }
 
-      //try to post data into the database
+      //Post form data to server
       const review = {
         "restaurant_id": parseInt(restaurant_id),
         "name": name,
         "rating": parseInt(rating),
         "comments": comments
       } 
+      
       //check connection status before submitting the form
       DBHelper.checkConnectionStatus(review);
       fillReview(review);
     }
-}
 });
 
 
