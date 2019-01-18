@@ -193,28 +193,30 @@ getParameterByName = (name, url) => {
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
+/**
+ * Mark restaurant as favorite
+ */
 
-
-
-
-function toggle(button)
-{
+function isFavorite() {
+  let favBox = document.getElementById("favorite-button");
   const id = getParameterByName('id');
-  if(document.getElementById("like-btn").value=="Like"){
+  if (favBox.checked == true){
     DBHelper.markFavorite(id);
-    document.getElementById("like-btn").value="Dislike";}
-
-  else if(document.getElementById("like-btn").value=="Dislike"){
+  } else {
     DBHelper.unmarkFavorite(id);
-   document.getElementById("like-btn").value="Like";}
+  }
 }
-
 
 /**
  * Submit modal review form
  */
+
+let successBox = document.getElementById('success-box');
+successBox.style.display = "none";
+
 document.getElementById('reviews-form').addEventListener('submit',(event)=>{
   event.preventDefault();
+  successBox.style.display = "block";
     const validForm = event.target;
     if (validForm.checkValidity()){
       const restaurant_id = getParameterByName('id');
@@ -230,6 +232,7 @@ document.getElementById('reviews-form').addEventListener('submit',(event)=>{
         }
       }
 
+
       //Post form data to server
       const review = {
         "restaurant_id": parseInt(restaurant_id),
@@ -237,10 +240,12 @@ document.getElementById('reviews-form').addEventListener('submit',(event)=>{
         "rating": parseInt(rating),
         "comments": comments
       } 
-      
+
       //check connection status before submitting the form
       DBHelper.checkConnectionStatus(review);
       fillReview(review);
+      
+      document.getElementById('success-message').innerHTML='Thank you for rating us '+rating+' stars';
     }
 });
 
