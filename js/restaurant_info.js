@@ -244,6 +244,7 @@ document.getElementById('reviews-form').addEventListener('submit',(event)=>{
       //check connection status before submitting the form
       DBHelper.checkConnectionStatus(review);
       fillReview(review);
+      validForm.reset();
       
       document.getElementById('success-message').innerHTML='Thank you for rating us '+rating+' stars';
     }
