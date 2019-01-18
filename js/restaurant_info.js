@@ -373,8 +373,8 @@ document.getElementById('reviews-form').addEventListener('submit',(event)=>{
         "rating": parseInt(rating),
         "comments": comments
       } 
-
-      DBHelper.postReview(review);
+      //check connection status before submitting the form
+      DBHelper.checkConnectionStatus(review);
       fillReview(review);
     }
 }

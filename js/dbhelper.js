@@ -26,7 +26,7 @@ class DBHelper {
         case 3:
           upgradeDb.createObjectStore('favorite-restaurants');
         case 4:
-          upgradeDb.createObjectStore('offline-reviews');
+          upgradeDb.createObjectStore('offline-reviews', { autoIncrement : true });
       }
     });
     return dbPromise;
@@ -265,6 +265,18 @@ class DBHelper {
       marker.addTo(newMap);
     return marker;
   } 
+  /**
+   * Check connection status
+   */
+  static checkConnectionStatus(review){
+    if(navigator.onLine){
+      console.log('we are online');
+      DBHelper.postReview(review);
+    }else{
+      DBHelper.handleOfflineDate(review);
+    }
+  }
+
 
   /**
    * get reviews
@@ -312,6 +324,20 @@ class DBHelper {
         });
       });
   }
+
+/**
+ * store form data in indexedDB if there is no connection 
+ */
+static handleOfflineDate(review){
+  console.log("You appear to be offline at the moment. Your review will be posted as soon as a connection is established");
+    const dbPromise = DBHelper.idbStorage();
+    dbPromise.then((db) => {
+      const tx = db.transaction('offline-reviews','readwrite');
+      const objectStore = tx.objectStore('offline-reviews');
+      objectStore.put(review);
+      return tx.complete;
+    });
+}
 /**
  * Post review form
  */
@@ -337,15 +363,7 @@ class DBHelper {
       });
       console.log(data);
     }).catch((error) => {
-      //console.log(error);
-      console.log("You appear to be offline at the moment. Your review will be posted as soon as a connection is established");
-      const dbPromise = DBHelper.idbStorage();
-      dbPromise.then((db) => {
-        const tx = db.transaction('offline-reviews','readwrite');
-        const objectStore = tx.objectStore('offline-reviews');
-        objectStore.put(review, review.restaurant_id);
-        return tx.complete;
-      });
+      console.log(error);
     });
   }
 
@@ -412,5 +430,45 @@ static isFavorite(restaurant){
         
       });
 }
+
+/**
+ * Check for offline reviews
+ */
+  static checkOfflineReviews(){
+   const dbPromise = DBHelper.idbStorage();
+   dbPromise.then((db)=>{
+     const tx = db.transaction('offline-reviews','readwrite');
+     const objectStore = tx.objectStore('offline-reviews');
+     return objectStore.openCursor();
+   }).then(function logItems(cursor) {
+    if (!cursor) {
+      return;
+    }
+    console.log('Cursored at:', cursor.key);
+    for (var field in cursor.value) {
+      //post offline reviews 
+      DBHelper.postReview(cursor.value);
+    }
+    return cursor.continue().then(logItems);
+  }).then(function() {
+    // Clear all the data form the object store
+    DBHelper.clearData();
+  });
+  }
+/**
+ * Clear offline-reviews objectStore after all offline reviews have been posted
+ */
+  static clearData(){
+    const dbPromise = DBHelper.idbStorage();
+    dbPromise.then((db)=>{
+      const tx = db.transaction('offline-reviews','readwrite');
+      const objectStore = tx.objectStore('offline-reviews');
+      return objectStore.clear();
+    }).then(()=>{
+      console.log('all offline reviews posted successfully');
+    }).catch((error)=>{
+      console.log(error);
+    });
+  }
  
 }
